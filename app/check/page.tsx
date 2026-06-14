@@ -10,22 +10,28 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <div className="mb-8">
-        <Link
-          href="/"
-          className="text-xs text-indigo-600 hover:underline dark:text-indigo-400"
-        >
-          ← トップへ戻る
-        </Link>
-        <h1 className="mt-3 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          AI コンプライアンスチェック
-        </h1>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          労働契約書を Claude が労働基準法の7項目に基づいて並行チェックします
-        </p>
-      </div>
-      <CheckPage />
-    </main>
+    <div className="flex flex-1 flex-col bg-zinc-50 dark:bg-zinc-950">
+      <header className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="mx-auto w-full max-w-3xl px-5 py-8 sm:px-6">
+          <Link
+            href="/"
+            className="text-xs font-semibold uppercase tracking-wider text-indigo-600 hover:underline dark:text-indigo-400"
+          >
+            ← 翻訳アプリに戻る
+          </Link>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl">
+            AI 労働コンプライアンス・チェック
+          </h1>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">
+            あなたの労働契約書や労働条件通知書を、最新のAI（Claude）が日本の労働基準法に基づき並行チェックします。
+            母国語での詳細な解説と改善提案を確認して、安全に働きましょう。
+          </p>
+        </div>
+      </header>
+
+      <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-8 sm:px-6">
+        <CheckPage />
+      </main>
+    </div>
   );
 }

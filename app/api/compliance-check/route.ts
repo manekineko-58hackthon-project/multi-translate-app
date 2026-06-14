@@ -5,6 +5,8 @@ import type {
   ComplianceCheckResponse,
   PersonaStatus,
 } from "@/lib/check/types";
+import { promises as fs } from "fs";
+import path from "path";
 
 const MAX_CONTRACT_LENGTH = 30000;
 
@@ -37,8 +39,20 @@ export async function POST(request: Request): Promise<Response> {
   try {
     const rawResults = await Promise.all(
       PERSONAS.map(async (persona) => {
+        let articleContent = "";
+        try {
+          const articlePath = path.join(process.cwd(), "docs", persona.articleDir, "article.md");
+          articleContent = await fs.readFile(articlePath, "utf-8");
+        } catch (e) {
+          console.warn(`Failed to read article.md for ${persona.id}`);
+        }
+
+        const enhancedInstruction = articleContent 
+          ? `${persona.systemInstruction}\n\n【参考資料: 関連法規・解説】\n以下の資料も考慮して判定を行ってください。\n---\n${articleContent}\n---`
+          : persona.systemInstruction;
+
         const output = await callPersona(
-          persona.systemInstruction,
+          enhancedInstruction,
           contractText,
           language,
           {

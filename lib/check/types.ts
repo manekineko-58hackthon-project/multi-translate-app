@@ -6,6 +6,7 @@ export interface PersonaTask {
   legalRef: string;
   legalSummary: string;
   systemInstruction: string;
+  articleDir: string;
 }
 
 export interface PersonaOutput {

@@ -14,6 +14,7 @@ export const PERSONAS: PersonaTask[] = [
     label: "賃金の明示",
     legalRef: "労基法15条",
     legalSummary: "賃金の決定・計算・支払い方法は必須明示事項",
+    articleDir: "wage-disclosure",
     systemInstruction: `${BASE_INSTRUCTION}
 【担当条文】労働基準法 第15条（労働条件の明示）— 賃金に関する部分
 【チェック観点】
@@ -32,6 +33,7 @@ export const PERSONAS: PersonaTask[] = [
     label: "所定労働時間",
     legalRef: "労基法32条",
     legalSummary: "週40時間・1日8時間以内が法定上限",
+    articleDir: "working-time",
     systemInstruction: `${BASE_INSTRUCTION}
 【担当条文】労働基準法 第32条（労働時間）
 - 第1項: 休憩時間を除き1週間について40時間を超えて労働させてはならない
@@ -51,6 +53,7 @@ export const PERSONAS: PersonaTask[] = [
     label: "休日",
     legalRef: "労基法35条",
     legalSummary: "毎週1日以上 または 4週間に4日以上の休日が必要",
+    articleDir: "holidays",
     systemInstruction: `${BASE_INSTRUCTION}
 【担当条文】労働基準法 第35条（休日）
 - 第1項: 毎週少なくとも1回の休日を与えなければならない
@@ -70,6 +73,7 @@ export const PERSONAS: PersonaTask[] = [
     label: "時間外割増賃金",
     legalRef: "労基法37条",
     legalSummary: "時間外25%以上・月60h超50%以上・深夜25%以上の割増が必要",
+    articleDir: "overtime-premium",
     systemInstruction: `${BASE_INSTRUCTION}
 【担当条文】労働基準法 第37条（割増賃金）
 - 時間外労働（法定外残業）: 25%以上（月60時間以内）
@@ -91,6 +95,7 @@ export const PERSONAS: PersonaTask[] = [
     label: "有給休暇",
     legalRef: "労基法39条",
     legalSummary: "6か月継続勤務後に10日付与・年5日の取得が義務",
+    articleDir: "paid-leave",
     systemInstruction: `${BASE_INSTRUCTION}
 【担当条文】労働基準法 第39条（年次有給休暇）
 - 6か月間継続勤務し全労働日の8割以上出勤 → 10労働日の有給休暇を付与
@@ -111,6 +116,7 @@ export const PERSONAS: PersonaTask[] = [
     label: "解雇予告",
     legalRef: "労基法20条",
     legalSummary: "解雇は30日前の予告または30日分の予告手当が必要",
+    articleDir: "dismissal-notice",
     systemInstruction: `${BASE_INSTRUCTION}
 【担当条文】労働基準法 第20条（解雇の予告）
 - 少なくとも30日前に予告しなければならない
@@ -132,6 +138,7 @@ export const PERSONAS: PersonaTask[] = [
     legalRef: "労基法21条",
     legalSummary:
       "試用期間中（14日以内）は解雇予告不要。設定する場合は明示が望ましい",
+    articleDir: "probation",
     systemInstruction: `${BASE_INSTRUCTION}
 【担当条文】労働基準法 第21条（解雇予告の適用除外）
 - 試の使用期間中の者は解雇予告が不要
