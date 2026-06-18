@@ -39,6 +39,9 @@ export default function ComplianceAgentApp() {
   const [translations, setTranslations] = useState<Record<number, string>>({});
   const [translatingLang, setTranslatingLang] = useState<TargetLangCode>(TARGET_LANGUAGES[0].code);
 
+  // チャット言語選択
+  const [chatLang, setChatLang] = useState<string>("Japanese");
+
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -64,7 +67,7 @@ export default function ComplianceAgentApp() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: nextMessages, role }),
+        body: JSON.stringify({ messages: nextMessages, role, language: chatLang }),
       });
 
       if (!res.ok || !res.body) {
@@ -144,34 +147,53 @@ export default function ComplianceAgentApp() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* 役割トグル */}
-      <div className="flex items-center gap-3">
-        <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-          あなたの立場:
-        </span>
-        <div className="flex rounded-lg border border-zinc-200 p-0.5 dark:border-zinc-700">
-          {(["worker", "employer"] as ChatRole[]).map((r) => (
-            <button
-              key={r}
-              onClick={() => handleRoleChange(r)}
-              className={`rounded-md px-4 py-1.5 text-sm font-medium transition-colors ${
-                role === r
-                  ? "bg-indigo-600 text-white shadow-sm"
-                  : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-              }`}
-            >
-              {r === "worker" ? "労働者" : "雇用者（使用者）"}
-            </button>
-          ))}
+      {/* 役割とチャット言語トグル */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+            あなたの立場:
+          </span>
+          <div className="flex rounded-lg border border-zinc-200 p-0.5 dark:border-zinc-700">
+            {(["worker", "employer"] as ChatRole[]).map((r) => (
+              <button
+                key={r}
+                onClick={() => handleRoleChange(r)}
+                className={`rounded-md px-4 py-1.5 text-sm font-medium transition-colors ${
+                  role === r
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                }`}
+              >
+                {r === "worker" ? "労働者" : "雇用者（使用者）"}
+              </button>
+            ))}
+          </div>
         </div>
-        {messages.length > 0 && (
-          <button
-            onClick={() => { setMessages([]); setTranslations({}); }}
-            className="ml-auto text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+            回答言語:
+          </span>
+          <select
+            value={chatLang}
+            onChange={(e) => setChatLang(e.target.value)}
+            className="rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm text-zinc-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/30 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
           >
-            会話をリセット
-          </button>
-        )}
+            <option value="Japanese">日本語</option>
+            <option value="English">English</option>
+            <option value="Chinese (Simplified)">中文 (简体)</option>
+            <option value="Korean">한국어</option>
+            <option value="Vietnamese">Tiếng Việt</option>
+          </select>
+          {messages.length > 0 && (
+            <button
+              onClick={() => { setMessages([]); setTranslations({}); }}
+              className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+            >
+              リセット
+            </button>
+          )}
+        </div>
       </div>
 
       {/* チャット本体 */}

@@ -1,4 +1,4 @@
-import TranslatorApp from "@/components/TranslatorApp";
+import ComplianceAgentApp from "@/components/ComplianceAgentApp";
 import Link from "next/link";
 
 const FLOW_STEPS = [
@@ -21,14 +21,14 @@ export default function Home() {
               href="/check"
               className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 transition-colors hover:bg-indigo-100 dark:bg-indigo-900/50 dark:text-indigo-300 dark:hover:bg-indigo-900"
             >
-              ✨ AIコンプラチェックはこちら &rarr;
+              ✨ Claudeコンプラチェックはこちら &rarr;
             </Link>
           </div>
           <h1 className="mt-4 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl">
             労働文書を、母国語で正しく理解する
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-600 dark:text-zinc-400">
-            働く人の権利を守り、雇う側の法令遵守を支援する AI エージェント。
+            働く人の権利を守り、雇う側の法令遵守を支援する Claude エージェント。
             労働基準法の条文を根拠に、あなたの疑問にその場でお答えします。
           </p>
           <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">

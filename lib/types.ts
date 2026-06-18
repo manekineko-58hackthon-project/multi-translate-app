@@ -59,4 +59,6 @@ export interface ChatRequest {
   messages: ChatMessage[];
   /** 労働者 / 雇用者 のどちらの視点で回答するか */
   role: ChatRole;
+  /** 回答する言語（任意） */
+  language?: string;
 }

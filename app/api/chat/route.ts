@@ -1,5 +1,5 @@
 import { MAX_TEXT_LENGTH } from "@/lib/constants";
-import { streamGemini } from "@/lib/gemini";
+import { streamClaude } from "@/lib/claude";
 import { buildSystemPrompt } from "@/lib/knowledge";
 import type { ChatMessage, ChatRequest, ChatRole } from "@/lib/types";
 
@@ -8,8 +8,8 @@ const VALID_ROLES = new Set<ChatRole>(["worker", "employer"]);
 /**
  * POST /api/chat
  * 労働法コンプラQ&Aエージェント。会話履歴と立場（労働者/雇用者）を受け取り、
- * Gemini の回答を text/plain でストリーミングする。
- * GEMINI_API_KEY 未設定時はモック回答をストリーミングし、キーなしでもデモできるようにする。
+ * Claude の回答を text/plain でストリーミングする。
+ * ANTHROPIC_API_KEY 未設定時はモック回答をストリーミングし、キーなしでもデモできるようにする。
  */
 export async function POST(request: Request): Promise<Response> {
   let payload: Partial<ChatRequest>;
@@ -21,6 +21,7 @@ export async function POST(request: Request): Promise<Response> {
 
   const messages = Array.isArray(payload.messages) ? payload.messages : [];
   const role = payload.role;
+  const language = payload.language || "Japanese";
 
   if (messages.length === 0) {
     return textError("質問を入力してください", 400);
@@ -39,16 +40,16 @@ export async function POST(request: Request): Promise<Response> {
     return textError("立場（労働者 / 雇用者）が不正です", 400);
   }
 
-  // GEMINI_API_KEY が無ければモックをストリーミング（デモ用）。
-  if (!process.env.GEMINI_API_KEY) {
+  // ANTHROPIC_API_KEY が無ければモックをストリーミング（デモ用）。
+  if (!process.env.ANTHROPIC_API_KEY) {
     return streamText(mockChunks(role, last.content));
   }
 
-  const systemPrompt = buildSystemPrompt(role);
+  const systemPrompt = buildSystemPrompt(role) + `\n\n【重要】\n以下の質問に対しては、必ず「${language}」で回答を出力してください。`;
 
   let iterator: AsyncGenerator<string>;
   try {
-    iterator = streamGemini(messages as ChatMessage[], systemPrompt);
+    iterator = streamClaude(messages as ChatMessage[], systemPrompt);
   } catch (err) {
     return textError(toMessage(err), 502);
   }
@@ -93,13 +94,13 @@ function streamText(source: AsyncIterable<string>): Response {
   });
 }
 
-/** GEMINI_API_KEY 未設定時のダミー回答（条文の固定文をチャンク分割で返す） */
+/** ANTHROPIC_API_KEY 未設定時のダミー回答（条文の固定文をチャンク分割で返す） */
 async function* mockChunks(
   role: ChatRole,
   question: string
 ): AsyncGenerator<string> {
   const roleLabel = role === "worker" ? "労働者" : "雇用者";
-  const text = `【Gemini未接続（モック回答）】GEMINI_API_KEY を設定すると、実際のAI回答が表示されます。
+  const text = `【Claude未接続（モック回答）】ANTHROPIC_API_KEY を設定すると、実際のAI回答が表示されます。
 
 ご質問（${roleLabel}の立場）:「${question}」
 
